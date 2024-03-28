@@ -5,8 +5,6 @@ from rest_framework import status
 from rest_framework.response import Response
 
 import pandas as pd
-import numpy as np
-import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 
