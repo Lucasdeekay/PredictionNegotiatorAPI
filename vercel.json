@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "builds": [
     {
       "src": "Negotiator/wsgi.py",
