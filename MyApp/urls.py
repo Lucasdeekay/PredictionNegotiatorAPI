@@ -8,4 +8,7 @@ urlpatterns = [
     path('logout', views.logout_user),
     path('forgot_password', views.forgot_password),
     path('retrieve_password', views.retrieve_password),
+    path('profile', views.profile),
+    path('dashboard', views.dashboard),
+    path('product<str:product_id>', views.details),
 ]
