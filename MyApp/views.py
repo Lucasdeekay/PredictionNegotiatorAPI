@@ -129,35 +129,11 @@ def dashboard(request):
     return JsonResponse(data, status=status.HTTP_200_OK)
 
 
-def load_model_from_url(model_url, local_filepath):
-    """Downloads a model file from a URL and loads it using joblib.
-
-  Args:
-      model_url: The URL of the model file.
-      local_filepath: The local path where the downloaded file will be saved.
-
-  Returns:
-      The loaded model object using joblib.
-  """
-
-    # Download the model file
-    response = requests.get(model_url)
-    if response.status_code == 200:
-        with open(local_filepath, 'wb') as f:
-            f.write(response.content)
-    else:
-        raise Exception(f"Error downloading model file: {response.status_code}")
-
-    # Load the model using joblib
-    return joblib.load(local_filepath)
-
-
 @csrf_exempt
 def details(request):
     if request.method == 'POST':
 
-        model_url = "https://price-predictor-api.s3.amazonaws.com/price_predictor_pipeline.joblib"
-        local_filepath = "model.joblib"
+        model_url = "static/price_predictor_pipeline.joblib"
 
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -166,13 +142,13 @@ def details(request):
             product = Product.objects.get(id=int(product_id))
             product_serializer = ProductSerializer(product)
 
-            model = load_model_from_url(model_url, local_filepath)
+            model = joblib.load(model_url)
 
             data = pd.DataFrame({
-                'discounted_price': [100.0],
-                'discount_percentage': [20.0],
-                'rating': [4.5],
-                'rating_count': [1000]
+                'discounted_price': [product.discounted_price],
+                'discount_percentage': [product.discount_percentage],
+                'rating': [product.rating],
+                'rating_count': [product.rating_count]
             })
 
             predicted_price = model.predict(data)
