@@ -15,7 +15,7 @@ from MyApp.models import Product
 from MyApp.serializers import ProductSerializer
 
 
-@csrf_exempt  # Consider adding CSRF protection if appropriate for your application
+
 def login_user(request):
     if request.method == 'POST':
         try:
@@ -28,19 +28,19 @@ def login_user(request):
                 user = authenticate(username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return JsonResponse({'success': 'Login successful', 'username': user.username}, status=200)
+                    return JsonResponse({'success': 'Login successful', 'username': user.username}, status=200, safe=False)
                 else:
-                    return JsonResponse({'error': 'Invalid credentials'}, status=401)
+                    return JsonResponse({'error': 'Invalid credentials'}, status=401, safe=False)
             else:
-                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+                return JsonResponse({'error': 'Invalid credentials'}, status=401, safe=False)
         except Exception as e:
-            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500)
+            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500, safe=False)
 
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405, safe=False)
 
 
-@csrf_exempt
+
 def register_user(request):
     if request.method == 'POST':
         try:
@@ -49,18 +49,17 @@ def register_user(request):
             email = data.get('email').strip()
             password = data.get('password').strip()
             if User.objects.filter(**{"username": username, "email": email}).exists():
-                return JsonResponse({'error': "User already exists"}, status=400)
+                return JsonResponse({'error': "User already exists"}, status=400, safe=False)
             else:
                 User.objects.create_user(username=username, password=password, email=email)
-                return JsonResponse({'success': "Registration successful"}, status=200)
+                return JsonResponse({'success': "Registration successful"}, status=200, safe=False)
         except Exception as e:
-            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500)
+            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500, safe=False)
 
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405, safe=False)
 
 
-@csrf_exempt
 def forgot_password(request):
     if request.method == 'POST':
         try:
@@ -73,21 +72,21 @@ def forgot_password(request):
                     'user_id': user.id,
                     'success': "Proceed to change password",
                 }
-                return JsonResponse(data, status=200)
+                return JsonResponse(data, status=200, safe=False)
             else:
                 data = {
                     'error': "User does not exist",
                 }
                 # Redirect to dashboard page
-                return JsonResponse(data, status=400)
+                return JsonResponse(data, status=400, safe=False)
         except Exception as e:
-            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500)
+            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500, safe=False)
 
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405, safe=False)
 
 
-@csrf_exempt
+
 def retrieve_password(request):
     if request.method == 'POST':
         try:
@@ -101,23 +100,22 @@ def retrieve_password(request):
                 'success': "Password change successful",
             }
             # Redirect to dashboard page
-            return JsonResponse(data, status=status.HTTP_200_OK)
+            return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
         except Exception as e:
-            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500)
+            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500, safe=False)
 
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405, safe=False)
 
 
-@csrf_exempt
 def logout_user(request):
     # logout user
     logout(request)
     # redirect to login page
-    return JsonResponse({}, status=status.HTTP_200_OK)
+    return JsonResponse({}, status=status.HTTP_200_OK, safe=False)
 
 
-@csrf_exempt
+
 def dashboard(request):
     products = Product.objects.all()
     products_serializer = ProductSerializer(products, many=True)
@@ -126,10 +124,10 @@ def dashboard(request):
         'products': products_serializer.data,
     }
     # Redirect to dashboard page
-    return JsonResponse(data, status=status.HTTP_200_OK)
+    return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
 
 
-@csrf_exempt
+
 def details(request):
     if request.method == 'POST':
 
@@ -158,9 +156,9 @@ def details(request):
                 'predicted_price': predicted_price[0][0],
             }
             # Redirect to dashboard page
-            return JsonResponse(data, status=status.HTTP_200_OK)
+            return JsonResponse(data, status=status.HTTP_200_OK, safe=False)
         except Exception as e:
-            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500)
+            return JsonResponse({'error': f'Internal server error: {str(e)}'}, status=500, safe=False)
 
     else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405, safe=False)
