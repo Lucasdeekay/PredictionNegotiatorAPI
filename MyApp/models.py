@@ -10,6 +10,7 @@ class Product(models.Model):
     discount_percentage = models.IntegerField(null=False, blank=False)
     rating = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     rating_count = models.IntegerField(null=False, blank=False)
+    predicted_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, null=False, blank=False)
     image_path = models.CharField(max_length=500, null=False, blank=False)
 
     def __str__(self):

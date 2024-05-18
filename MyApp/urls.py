@@ -9,5 +9,5 @@ urlpatterns = [
     path('forgot_password', views.forgot_password),
     path('retrieve_password', views.retrieve_password),
     path('dashboard', views.dashboard),
-    path('product', views.details),
+    path('product/<str:product_id>', views.details),
 ]

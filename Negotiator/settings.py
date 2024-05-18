@@ -25,7 +25,7 @@ SECRET_KEY = 'ghgjghduiyu783y3687eytyutyuwgjkhoiy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["priceprediction.com.ng", "www.priceprediction.com.ng"]
+ALLOWED_HOSTS = ["*", "priceprediction.com.ng", "www.priceprediction.com.ng"]
 
 
 # Application definition
